@@ -1,12 +1,10 @@
 from flask import Flask, request, jsonify, render_template
-import re
+import re, string
+from random import choice
 
 app = Flask(__name__)
 
-@app.route('/generate', methods=['GET'])
-def generate():
-
-    #generate according to spec
+#generate according to spec
 # Position 1 – numeric values 1 thru 9
 # Position 2 – alphabetic values A thru Z (minus S, L, O, I, B, Z)
 # Position 3 – alpha-numeric values 0 thru 9 and A thru Z (minus S, L, O, I, B, Z)
@@ -19,7 +17,23 @@ def generate():
 # Position 10 – numeric values 0 thru 9
 # Position 11 – numeric values 0 thru 9
 
-    return "1EG4TE5MK73"
+mbiGenerators = {
+    'C': [str(i) for i in range(1, 10)],
+    'N': [str(i) for i in range(10)],
+    'A': [s for s in string.ascii_uppercase if s not in 'SLOIBZ'],
+    'AN': [s for s in string.ascii_uppercase if s not in 'SLOIBZ'] + [str(i) for i in range(10)]
+}
+
+mbiFormat = ['C', 'A', 'AN', 'N', 'A', 'AN', 'N', 'A', 'A', 'N', 'N']
+
+@app.route('/generate', methods=['GET'])
+def generate():
+    res = ''
+
+    for c in mbiFormat:
+        res += choice(mbiGenerators[c])
+
+    return res
 
 
 @app.route('/verify', methods=['POST'])
@@ -41,4 +55,4 @@ def verify(m):
 
 @app.route("/")
 def index():
-    return render_template("base.html")
+    return render_template("./base.html")
