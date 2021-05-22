@@ -9,6 +9,9 @@ angular.module('mbiApp', [])
     .controller('mbiCtrl', ['$scope', '$http', function($scope, $http) {
 
         $scope.generate = function generate() {
+            delete $scope.valid;
+            delete $scope.errors;
+
             $http.get('/generate').then(function (r) {
                 $scope.mbi = r.data;
             })
@@ -17,11 +20,11 @@ angular.module('mbiApp', [])
         $scope.validate = function validate() {
             $http.post('/verify', {mbi: $scope.mbi}).then(function (r) {
                 $scope.valid = r.data.valid;
-                $scope.error = r.data.error;
+                $scope.errors = r.data.errors;
 
             }, function (err) {
                 $scope.valid = false;
-                $scope.error = err;
+                $scope.errors = [err];
             })
         }
     }]);

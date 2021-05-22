@@ -4,7 +4,7 @@ from random import choice
 
 app = Flask(__name__)
 
-#generate according to spec
+# according to MBI spec
 # Position 1 – numeric values 1 thru 9
 # Position 2 – alphabetic values A thru Z (minus S, L, O, I, B, Z)
 # Position 3 – alpha-numeric values 0 thru 9 and A thru Z (minus S, L, O, I, B, Z)
@@ -27,10 +27,10 @@ mbiGenerators = {
 mbiFormat = ['C', 'A', 'AN', 'N', 'A', 'AN', 'N', 'A', 'A', 'N', 'N']
 
 mbiDesignations = {
-    'C': 'numeric values 1 thru 9',
-    'N': 'numeric values 0 thru 9',
-    'A': 'uppercase alphabetic values A thru Z (minus S, L, O, I, B, Z)',
-    'AN': 'uppercase alpha-numeric values 0 thru 9 and A thru Z (minus S, L, O, I, B, Z)'
+    'C': 'numeric values 1 through 9',
+    'N': 'numeric values 0 through 9',
+    'A': 'uppercase alphabetic values A through Z (minus S, L, O, I, B, Z)',
+    'AN': 'uppercase alpha-numeric values 0 through 9 and A through Z (minus S, L, O, I, B, Z)'
 }
 
 @app.route('/generate', methods=['GET'])
@@ -42,7 +42,6 @@ def generate():
 
     return res
 
-
 @app.route('/verify', methods=['POST'])
 def verify():
 
@@ -51,21 +50,21 @@ def verify():
 
     if mbi:
         # https://stackoverflow.com/questions/47683221/regular-expression-for-medicare-mbi-number-format
-        # regexp for quick validation? Seems to fail with strings that are too short
-        # match = re.search(r"^\d(?![SLOIBZ])[A-Z]\d|(?![SLOIBZ])[A-Z]\d(?![SLOIBZ])[A-Z]\d|(?![SLOIBZ])[A-Z]\d(?![SLOIBZ])[A-Z](?![SLOIBZ])[A-Z]\d\d$", mbi)
+        # regexp for quick validation. This seems like cheating and would not allow for returning a meaningful error message.
+        # re.search(r"^\d(?![SLOIBZ])[A-Z]\d|(?![SLOIBZ])[A-Z]\d(?![SLOIBZ])[A-Z]\d|(?![SLOIBZ])[A-Z]\d(?![SLOIBZ])[A-Z](?![SLOIBZ])[A-Z]\d\d$", mbi)
 
         if len(mbi) != len(mbiFormat):
             resp['valid'] = False
-            resp['error'] = f'The MBI must be exactly {len(mbiFormat)} characters long'
+            resp['errors'] = [f'The MBI must be exactly {len(mbiFormat)} characters.']
         else:
             resp['valid'] = True
 
             for i in range(len(mbiFormat)):
                 if mbi[i] not in mbiGenerators[mbiFormat[i]]:
                     resp['valid'] = False
-                    if 'error' not in resp:
-                        resp['error'] = ''
-                    resp['error'] += f'{i + 1}th characters must be {mbiDesignations[mbiFormat[i]]} '
+                    if 'errors' not in resp:
+                        resp['errors'] = []
+                    resp['errors'].append(f'{i + 1}{ {0: "st", 1: "nd", 2: "rd"}[i] if i < 3 else "th" } character must be {mbiDesignations[mbiFormat[i]]}')
 
     return jsonify(resp)
 

@@ -1,11 +1,17 @@
-import pytest
 import app
 
 def test_get():
     r = app.generate()
     assert len(r) == 11
-    assert app.verify(r) == True
+
 
 def test_verify():
-    r = app.verify("1EG4TE5MK73")
+    app.request = {'json': {'mbi': '5Y20MA2KW16'}}
+    r = app.verify()
+    assert r == True
+
+def test_generate_then_verify():
+    r = app.generate()
+    app.request = {'json': {'mbi': r}}
+    r = app.verify()
     assert r == True

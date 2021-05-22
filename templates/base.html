@@ -6,33 +6,35 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<div class="jumbotron" ng-controller="mbiCtrl">
+<div class="jumbotron col-md-8" ng-controller="mbiCtrl">
     <h3 class="display-4">Medicare Beneficiary Identifier</h3>
     <p class="lead">This is a simple generator and validator for the MBI format.</p>
 
-    <div class="input-group">
-
-
-        <div class="input-group-prepend">
+    <form>
+        <div class="row">
             <button class="btn btn-outline-secondary" ng-click="generate()" type="button">Generate</button>
         </div>
+        <div class="row">
+            <input type="text" class="form-control"
+                   ng-class="valid !== undefined ? (valid ? 'is-valid' : 'is-invalid') : '' "
+                   ng-model="mbi" placeholder="###########" aria-label="Medicare Beneficiary Identifier" aria-describedby="basic-addon2">
+        </div>
+        <div class="row">
+            <button type="submit" class="btn btn-outline-primary" type="button" ng-click="validate()">Verify</button>
+        </div>
+    </form>
 
-        <input type="text" class="form-control" ng-model="mbi" placeholder="###########" aria-label="Medicare Beneficiary Identifier" aria-describedby="basic-addon2">
-
-        <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" ng-click="validate()">Verify</button>
+    <div class="alert" ng-show="valid !== undefined" ng-class="valid ? 'alert-success' : 'alert-danger'" role="alert">
+        <div class="row">This MBI is {[{ valid ? '' : 'not' }]} valid!</div>
+        <div class="row" ng-repeat="e in errors">
+            {[{ e }]}
         </div>
     </div>
 
     <hr class="my-4">
-    <p>Please note that the dashes are just for display and are not part of the MBI, also note that all letters are required to be uppercase.
+    <p>Note that the dashes are just for display and are not part of the MBI, also note that all letters are required to be uppercase.
+        For more information please see the MBI specifications <a href="https://www.cms.gov/medicare/new-medicare-card/understanding-the-mbi-with-format.pdf" target="_blank">here</a>.
     </p>
-    <div class="alert" ng-show="valid !== undefined" ng-class="valid ? 'alert-success' : 'alert-danger'" role="alert" ng-model>
-        This MBI is {[{ valid ? '' : 'not' }]} valid!
-        <br/>
-        {[{ error }]}
-
-    </div>
 
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
