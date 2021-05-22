@@ -1,46 +1,44 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
+import re
 
 app = Flask(__name__)
 
-@app.route('/get/', methods=['GET'])
-def respond():
-    # Retrieve the name from url parameter
-    name = request.args.get("name", None)
+@app.route('/generate', methods=['GET'])
+def generate():
 
-    # For debugging
-    print(f"got name {name}")
+    #generate according to spec
+# Position 1 – numeric values 1 thru 9
+# Position 2 – alphabetic values A thru Z (minus S, L, O, I, B, Z)
+# Position 3 – alpha-numeric values 0 thru 9 and A thru Z (minus S, L, O, I, B, Z)
+# Position 4 – numeric values 0 thru 9
+# Position 5 – alphabetic values A thru Z (minus S, L, O, I, B, Z)
+# Position 6 – alpha-numeric values 0 thru 9 and A thru Z (minus S, L, O, I, B, Z)
+# Position 7 – numeric values 0 thru 9
+# Position 8 – alphabetic values A thru Z (minus S, L, O, I, B, Z)
+# Position 9 – alphabetic values A thru Z (minus S, L, O, I, B,Z)
+# Position 10 – numeric values 0 thru 9
+# Position 11 – numeric values 0 thru 9
 
-    response = {}
+    return "1EG4TE5MK73"
 
-    # Check if user sent a name at all
-    if not name:
-        response["ERROR"] = "no name found, please send a name."
-    # Check if the user entered a number not a name
-    elif str(name).isdigit():
-        response["ERROR"] = "name can't be numeric."
-    # Now the user entered a valid name
-    else:
-        response["MESSAGE"] = f"Welcome {name} to our awesome platform!!"
 
-    # Return the response in json format
-    return jsonify(response)
+@app.route('/verify', methods=['POST'])
+def verify(m):
 
-@app.route('/verify/', methods=['POST'])
-def post_something():
-    param = request.form.get('name')
-    print(param)
-    # You can add the test cases you made in the previous function, but in our case here you are just testing the POST functionality
-    if param:
-        return jsonify({
-            "Message": f"Welcome {name} to our awesome platform!!",
-            # Add this option to distinct the POST request
-            "METHOD" : "POST"
-        })
-    else:
-        return jsonify({
-            "ERROR": "no name found, please send a name."
-        })
+    mbi = m #request.form.get('mbi')
+    print(mbi)
+
+    # https://stackoverflow.com/questions/47683221/regular-expression-for-medicare-mbi-number-format
+    # regexp for quick validation
+
+    if mbi:
+        match = re.search(r"^\d(?![SLOIBZ])[A-Z]\d|(?![SLOIBZ])[A-Z]\d(?![SLOIBZ])[A-Z]\d|(?![SLOIBZ])[A-Z]\d(?![SLOIBZ])[A-Z](?![SLOIBZ])[A-Z]\d\d$", mbi)
+        if match is not None:
+            return True
+        else:
+            #if it fails iterate char by char to find the issue and return a meaningful message
+            return False
 
 @app.route("/")
 def index():
-    return "Hello World!"
+    return render_template("base.html")
