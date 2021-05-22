@@ -1,9 +1,7 @@
 <html ng-app="mbiApp">
 <head>
-
-{#    <script src="{{ url_for('static', filename='app.js') }}"></script>#}
-
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
 <div class="jumbotron col-md-8" ng-controller="mbiCtrl">
@@ -11,15 +9,15 @@
     <p class="lead">This is a simple generator and validator for the MBI format.</p>
 
     <form>
-        <div class="row">
+        <div class="row col-md-4">
             <button class="btn btn-outline-secondary" ng-click="generate()" type="button">Generate</button>
         </div>
-        <div class="row">
+        <div class="row col-md-4">
             <input type="text" class="form-control"
                    ng-class="valid !== undefined ? (valid ? 'is-valid' : 'is-invalid') : '' "
                    ng-model="mbi" placeholder="###########" aria-label="Medicare Beneficiary Identifier" aria-describedby="basic-addon2">
         </div>
-        <div class="row">
+        <div class="row col-md-4">
             <button type="submit" class="btn btn-outline-primary" type="button" ng-click="validate()">Verify</button>
         </div>
     </form>
