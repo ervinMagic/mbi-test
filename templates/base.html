@@ -1,19 +1,41 @@
+<html ng-app="mbiApp">
 <head>
+
+{#    <script src="{{ url_for('static', filename='app.js') }}"></script>#}
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<h1>Hello World!</h1>
-<div>
+<div class="jumbotron" ng-controller="mbiCtrl">
+    <h3 class="display-4">Medicare Beneficiary Identifier</h3>
+    <p class="lead">This is a simple generator and validator for the MBI format.</p>
 
-    <form>
-        <div class="form-outline">
-            <input type="text" id="form1" class="form-control" />
-            <label class="form-label" for="form1">Example label</label>
+    <div class="input-group">
+
+
+        <div class="input-group-prepend">
+            <button class="btn btn-outline-secondary" ng-click="generate()" type="button">Generate</button>
         </div>
-        <button type="button" class="btn">Generate</button>
-        <button type="submit" class="btn btn-primary">Verify</button>
-    </form>
+
+        <input type="text" class="form-control" ng-model="mbi" placeholder="###########" aria-label="Medicare Beneficiary Identifier" aria-describedby="basic-addon2">
+
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" ng-click="validate()">Verify</button>
+        </div>
+    </div>
+
+    <hr class="my-4">
+    <p>Please note that the dashes are just for display and are not part of the MBI, also note that all letters are required to be uppercase.
+    </p>
+    <div class="alert" ng-show="valid !== undefined" ng-class="valid ? 'alert-success' : 'alert-danger'" role="alert" ng-model>
+        This MBI is {[{ valid ? '' : 'not' }]} valid!
+        <br/>
+        {[{ error }]}
+
+    </div>
 
 </div>
-    <script src="/static/app.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<script src="/static/app.js"></script>
 </body>
+</html>

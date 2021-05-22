@@ -26,6 +26,13 @@ mbiGenerators = {
 
 mbiFormat = ['C', 'A', 'AN', 'N', 'A', 'AN', 'N', 'A', 'A', 'N', 'N']
 
+mbiDesignations = {
+    'C': 'numeric values 1 thru 9',
+    'N': 'numeric values 0 thru 9',
+    'A': 'uppercase alphabetic values A thru Z (minus S, L, O, I, B, Z)',
+    'AN': 'uppercase alpha-numeric values 0 thru 9 and A thru Z (minus S, L, O, I, B, Z)'
+}
+
 @app.route('/generate', methods=['GET'])
 def generate():
     res = ''
@@ -37,21 +44,30 @@ def generate():
 
 
 @app.route('/verify', methods=['POST'])
-def verify(m):
+def verify():
 
-    mbi = m #request.form.get('mbi')
-    print(mbi)
-
-    # https://stackoverflow.com/questions/47683221/regular-expression-for-medicare-mbi-number-format
-    # regexp for quick validation
+    mbi = request.json.get('mbi')
+    resp = {'valid': False}
 
     if mbi:
-        match = re.search(r"^\d(?![SLOIBZ])[A-Z]\d|(?![SLOIBZ])[A-Z]\d(?![SLOIBZ])[A-Z]\d|(?![SLOIBZ])[A-Z]\d(?![SLOIBZ])[A-Z](?![SLOIBZ])[A-Z]\d\d$", mbi)
-        if match is not None:
-            return True
+        # https://stackoverflow.com/questions/47683221/regular-expression-for-medicare-mbi-number-format
+        # regexp for quick validation? Seems to fail with strings that are too short
+        # match = re.search(r"^\d(?![SLOIBZ])[A-Z]\d|(?![SLOIBZ])[A-Z]\d(?![SLOIBZ])[A-Z]\d|(?![SLOIBZ])[A-Z]\d(?![SLOIBZ])[A-Z](?![SLOIBZ])[A-Z]\d\d$", mbi)
+
+        if len(mbi) != len(mbiFormat):
+            resp['valid'] = False
+            resp['error'] = f'The MBI must be exactly {len(mbiFormat)} characters long'
         else:
-            #if it fails iterate char by char to find the issue and return a meaningful message
-            return False
+            resp['valid'] = True
+
+            for i in range(len(mbiFormat)):
+                if mbi[i] not in mbiGenerators[mbiFormat[i]]:
+                    resp['valid'] = False
+                    if 'error' not in resp:
+                        resp['error'] = ''
+                    resp['error'] += f'{i + 1}th characters must be {mbiDesignations[mbiFormat[i]]} '
+
+    return jsonify(resp)
 
 @app.route("/")
 def index():
