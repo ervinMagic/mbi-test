@@ -1,6 +1,8 @@
-<html ng-app="mbiApp">
+<!DOCTYPE html>
+<html lang="en" ng-app="mbiApp">
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
@@ -15,7 +17,8 @@
         <div class="row col-md-4">
             <input type="text" class="form-control"
                    ng-class="valid !== undefined ? (valid ? 'is-valid' : 'is-invalid') : '' "
-                   ng-model="mbi" placeholder="###########" aria-label="Medicare Beneficiary Identifier" aria-describedby="basic-addon2">
+                   ng-model="mbi" placeholder="###########" aria-label="Medicare Beneficiary Identifier"
+                   aria-describedby="basic-addon2">
         </div>
         <div class="row col-md-4">
             <button type="submit" class="btn btn-outline-primary" type="button" ng-click="validate()">Verify</button>
@@ -23,15 +26,20 @@
     </form>
 
     <div class="alert" ng-show="valid !== undefined" ng-class="valid ? 'alert-success' : 'alert-danger'" role="alert">
-        <div class="row">This MBI is {[{ valid ? '' : 'not' }]} valid!</div>
+        <div class="row">This MBI is {[{ valid ? '' : 'not' }]}
+            valid{[{valid && errors.length > 0 ? ', once converted' : '' }]}.
+        </div>
         <div class="row" ng-repeat="e in errors">
             {[{ e }]}
         </div>
     </div>
 
     <hr class="my-4">
-    <p>Note that the dashes are just for display and are not part of the MBI, also note that all letters are required to be uppercase.
-        For more information please see the MBI specifications <a href="https://www.cms.gov/medicare/new-medicare-card/understanding-the-mbi-with-format.pdf" target="_blank">here</a>.
+    <p>Note that the dashes are just for display and are not part of the MBI,
+        also note that all letters <i>should</i> be uppercase.
+        For more information please see the MBI specifications
+        <a href="https://www.cms.gov/medicare/new-medicare-card/understanding-the-mbi-with-format.pdf"
+           target="_blank">here</a>.
     </p>
 
 </div>
