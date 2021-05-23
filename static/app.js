@@ -27,4 +27,13 @@ angular.module('mbiApp', [])
                 $scope.errors = [err];
             })
         }
+
+        $scope.continuousVerification = false;
+
+        $scope.$watch('mbi', function() {
+            if ($scope.continuousVerification) {
+                $scope.validate();
+            }
+        })
+
     }]);

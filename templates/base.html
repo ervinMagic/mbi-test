@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="mbiApp">
 <head>
+    <title>Medicare Beneficiary Identifier</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="../static/style.css">
@@ -23,6 +24,14 @@
         <div class="row col-md-4">
             <button type="submit" class="btn btn-outline-primary" type="button" ng-click="validate()">Verify</button>
         </div>
+        <div class="row col-md-4">
+            <div class="form-check">
+                <input class="form-check-input" ng-model="continuousVerification" type="checkbox" value="" id="flexCheckChecked" checked>
+                <label class="form-check-label" for="flexCheckChecked">
+                    continuous verification
+                </label>
+            </div>
+        </div>
     </form>
 
     <div class="alert" ng-show="valid !== undefined" ng-class="valid ? 'alert-success' : 'alert-danger'" role="alert">
@@ -35,11 +44,12 @@
     </div>
 
     <hr class="my-4">
-    <p>Note that the dashes are just for display and are not part of the MBI,
-        also note that all letters <i>should</i> be uppercase.
+    <p> Note that the dashes are not part of the MBI and all letters <i>should</i> be uppercase.
         For more information please see the MBI specifications
         <a href="https://www.cms.gov/medicare/new-medicare-card/understanding-the-mbi-with-format.pdf"
            target="_blank">here</a>.
+        For this implementation we are being lenient and removing all dashes and capitalizing all letters,
+         but the user is still notified of this conversion.
     </p>
 
 </div>
