@@ -4,7 +4,8 @@ from random import choice
 
 app = Flask(__name__)
 
-# according to MBI spec here, https://www.cms.gov/medicare/new-medicare-card/understanding-the-mbi-with-format.pdf
+# We generate and validate according to MBI spec here
+# https://www.cms.gov/medicare/new-medicare-card/understanding-the-mbi-with-format.pdf
 # Position 1 – numeric values 1 thru 9
 # Position 2 – alphabetic values A thru Z (minus S, L, O, I, B, Z)
 # Position 3 – alpha-numeric values 0 thru 9 and A thru Z (minus S, L, O, I, B, Z)
@@ -55,9 +56,9 @@ def verify():
 
         # automatically remove dashes and convert to uppercase, but warn the user
         if not mbi.isupper():
-            resp['errors'].append('The MBI should use be upper-case letters.')
+            resp['errors'].append('The MBI should only use uppercase letters.')
         if "-" in mbi:
-            resp['errors'].append('The MBI does NOT include dashes.')
+            resp['errors'].append('The MBI should NOT include dashes.')
 
         if len(resp['errors']) > 0:
             mbi = mbi.upper().replace("-", "")

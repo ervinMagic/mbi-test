@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
-<div class="jumbotron col-md-8" ng-controller="mbiCtrl">
+<div class="jumbotron" ng-controller="mbiCtrl">
     <h3 class="display-4">Medicare Beneficiary Identifier</h3>
     <p class="lead">This is a simple generator and validator for the MBI format.</p>
 
@@ -24,11 +24,11 @@
         <div class="row col-md-4">
             <button type="submit" class="btn btn-outline-primary" type="button" ng-click="validate()">Verify</button>
         </div>
-        <div class="row col-md-4">
+        <div class="row col-md-8">
             <div class="form-check">
                 <input class="form-check-input" ng-model="continuousVerification" type="checkbox" value="" id="flexCheckChecked" checked>
                 <label class="form-check-label" for="flexCheckChecked">
-                    continuous verification
+                    Check this box for constant verification as you type
                 </label>
             </div>
         </div>
@@ -44,11 +44,11 @@
     </div>
 
     <hr class="my-4">
-    <p> Note that the dashes are not part of the MBI and all letters <i>should</i> be uppercase.
+    <p> Please note that all letters <i>should</i> be uppercase and that dashes are not part of the MBI.
         For more information please see the MBI specifications
         <a href="https://www.cms.gov/medicare/new-medicare-card/understanding-the-mbi-with-format.pdf"
            target="_blank">here</a>.
-        For this implementation we are being lenient and removing all dashes and capitalizing all letters,
+        This implementation is lenient and removing all dashes and capitalizing all letters,
          but the user is still notified of this conversion.
     </p>
 
