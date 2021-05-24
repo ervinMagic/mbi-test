@@ -46,10 +46,14 @@ def generate():
 @app.route('/verify', methods=['POST'])
 def verify():
 
-    mbi = request.json.get('mbi')
     resp = {'valid': False, 'errors': []}
 
-    if mbi:
+    if not request or not request.data or not request.is_json:
+        return jsonify(resp)
+
+    mbi = request.json.get('mbi')
+
+    if mbi and type(mbi) == str:
         # https://stackoverflow.com/questions/47683221/regular-expression-for-medicare-mbi-number-format
         # regexp for quick validation. This seems like cheating and would not allow for returning a meaningful error message.
         # re.search(r"^\d(?![SLOIBZ])[A-Z]\d|(?![SLOIBZ])[A-Z]\d(?![SLOIBZ])[A-Z]\d|(?![SLOIBZ])[A-Z]\d(?![SLOIBZ])[A-Z](?![SLOIBZ])[A-Z]\d\d$", mbi)
